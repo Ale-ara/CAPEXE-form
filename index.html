@@ -198,5 +198,27 @@
     });
 </script>
 
+
+    <script>
+    // Função para obter parâmetros da URL
+    function getParameterByName(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+    }
+
+    // Substituir o marcador {USERNAME} pelo valor do parâmetro username
+    window.addEventListener('DOMContentLoaded', () => {
+        const username = getParameterByName('username');
+        if (username) {
+            const welcomeMessage = document.querySelector('#welcome-container h2');
+            if (welcomeMessage) {
+                welcomeMessage.innerHTML = `Olá ${username}, seja bem-vindo ao formulário de Controle de Contratações do turno Vespertino.`;
+            }
+        }
+    });
+</script>
+
+
+
 </body>
 </html>
