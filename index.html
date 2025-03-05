@@ -214,7 +214,7 @@
         loadingMessage.style.animation = 'fadeIn 0.5s ease-in-out';
 
         // Realizando o envio do formulário
-        fetch('https://script.google.com/macros/s/AKfycbwZ-EWAlVCU8ae41CbNkZtmriQdU0bhVlAtZKtvMxcIRSH0Op2BCMnLOblMt-dZ7cDH/exec', {
+        fetch('https://script.google.com/macros/s/AKfycbz-SgCnqK_0pVdoq90O4EuqoPfDJlRyyrTz5hAjZ-W5y6YmrdZsdejgXdpiqgUOon8A/exec', {
             method: 'POST',
             mode: 'no-cors', // Alterar para 'cors' se permitido pelo servidor
             headers: {
@@ -271,7 +271,7 @@
         if (username) {
             const welcomeMessage = document.querySelector('#welcome-container h2');
             if (welcomeMessage) {
-                welcomeMessage.innerHTML = `Olá ${username}, seja bem-vindo ao formulário de Controle de Contratações do turno Vespertino.`;
+                welcomeMessage.innerHTML = `Olá ${username}, seja bem-vindo ao formulário de Controle de Contratações.`;
             }
         }
     });
