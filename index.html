@@ -213,10 +213,10 @@
         loadingMessage.classList.add('show');
         loadingMessage.style.animation = 'fadeIn 0.5s ease-in-out';
 
-        // Realizando o envio do formulário
-        fetch('https://script.google.com/macros/s/AKfycbz-SgCnqK_0pVdoq90O4EuqoPfDJlRyyrTz5hAjZ-W5y6YmrdZsdejgXdpiqgUOon8A/exec', {
+        // Enviando os dados ao servidor
+        fetch('https://script.google.com/macros/s/AKfycbzrel7ZXriEXLb7EbDLwlaD74g7VtPtAy3UFbXrpeSm3CuSKt6LwJvg7MdEdlnez7sM/exec', {
             method: 'POST',
-            mode: 'no-cors', // Alterar para 'cors' se permitido pelo servidor
+            mode: 'cors', // Usando 'cors' para acesso à resposta
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -226,13 +226,18 @@
                 nickCivil: nickCivil,
                 comprovacao: comprovacao
             })
-        }).then(() => {
-            // Exibe mensagem de sucesso
+        })
+        .then(response => response.json())
+        .then(data => {
             loadingMessage.style.animation = 'fadeOut 0.5s ease-in-out';
             setTimeout(() => loadingMessage.classList.remove('show'), 500);
 
             const successMessage = document.getElementById('success-message');
-            successMessage.innerHTML = '<h3>Formulário enviado com sucesso!</h3>';
+            if (data.status === 'success') {
+                successMessage.innerHTML = `<h3>${data.message}</h3>`;
+            } else {
+                successMessage.innerHTML = `<h3>Erro: ${data.message}</h3>`;
+            }
             successMessage.classList.add('show');
             successMessage.style.animation = 'fadeIn 0.5s ease-in-out';
 
@@ -242,8 +247,8 @@
             }, 3000);
 
             document.getElementById('contract-form').reset();
-        }).catch(error => {
-            // Exibe mensagem de erro
+        })
+        .catch(error => {
             loadingMessage.style.animation = 'fadeOut 0.5s ease-in-out';
             setTimeout(() => loadingMessage.classList.remove('show'), 500);
 
@@ -257,7 +262,7 @@
                 setTimeout(() => successMessage.classList.remove('show'), 500);
             }, 3000);
 
-            console.error('Error:', error);
+            console.error('Erro na solicitação:', error);
         });
     });
 
@@ -271,7 +276,7 @@
         if (username) {
             const welcomeMessage = document.querySelector('#welcome-container h2');
             if (welcomeMessage) {
-                welcomeMessage.innerHTML = `Olá ${username}, seja bem-vindo ao formulário de Controle de Contratações.`;
+                welcomeMessage.innerHTML = `Olá ${username}, seja bem-vindo ao formulário de Controle de Contratações do turno Vespertino.`;
             }
         }
     });
