@@ -196,12 +196,12 @@
 </div>
 
 <script>
-    document.getElementById('start-form').addEventListener('click', function() {
+    document.getElementById('start-form').addEventListener('click', function () {
         document.getElementById('welcome-container').classList.add('hidden');
         document.getElementById('form-container').classList.remove('hidden');
     });
 
-    document.getElementById('contract-form').addEventListener('submit', function(event) {
+    document.getElementById('contract-form').addEventListener('submit', function (event) {
         event.preventDefault();
 
         const nickNumeracao = document.getElementById('nickNumeracao').value;
@@ -213,9 +213,10 @@
         loadingMessage.classList.add('show');
         loadingMessage.style.animation = 'fadeIn 0.5s ease-in-out';
 
-        fetch('https://script.google.com/macros/s/AKfycbwZ-EWAlVCU8ae41CbNkZtmriQdU0bhVlAtZKtvMxcIRSH0Op2BCMnLOblMt-dZ7cDH/exec, {
+        // Realizando o envio do formulário
+        fetch('https://script.google.com/macros/s/AKfycbwZ-EWAlVCU8ae41CbNkZtmriQdU0bhVlAtZKtvMxcIRSH0Op2BCMnLOblMt-dZ7cDH/exec', {
             method: 'POST',
-            mode: 'no-cors',
+            mode: 'no-cors', // Alterar para 'cors' se permitido pelo servidor
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -225,34 +226,37 @@
                 nickCivil: nickCivil,
                 comprovacao: comprovacao
             })
-        }).then(response => {
+        }).then(() => {
+            // Exibe mensagem de sucesso
             loadingMessage.style.animation = 'fadeOut 0.5s ease-in-out';
-            setTimeout(() => {
-                loadingMessage.classList.remove('show');
-            }, 500);
+            setTimeout(() => loadingMessage.classList.remove('show'), 500);
 
             const successMessage = document.getElementById('success-message');
+            successMessage.innerHTML = '<h3>Formulário enviado com sucesso!</h3>';
             successMessage.classList.add('show');
             successMessage.style.animation = 'fadeIn 0.5s ease-in-out';
 
             setTimeout(() => {
                 successMessage.style.animation = 'fadeOut 0.5s ease-in-out';
-                setTimeout(() => {
-                    successMessage.classList.remove('show');
-                }, 500);
+                setTimeout(() => successMessage.classList.remove('show'), 500);
             }, 3000);
 
             document.getElementById('contract-form').reset();
         }).catch(error => {
+            // Exibe mensagem de erro
             loadingMessage.style.animation = 'fadeOut 0.5s ease-in-out';
-            setTimeout(() => {
-                loadingMessage.classList.remove('show');
-            }, 500);
+            setTimeout(() => loadingMessage.classList.remove('show'), 500);
 
             const successMessage = document.getElementById('success-message');
-            successMessage.innerHTML = '<h3>Erro ao enviar o formulário.</h3>';
+            successMessage.innerHTML = '<h3>Erro ao enviar o formulário. Tente novamente mais tarde.</h3>';
             successMessage.classList.add('show');
             successMessage.style.animation = 'fadeIn 0.5s ease-in-out';
+
+            setTimeout(() => {
+                successMessage.style.animation = 'fadeOut 0.5s ease-in-out';
+                setTimeout(() => successMessage.classList.remove('show'), 500);
+            }, 3000);
+
             console.error('Error:', error);
         });
     });
