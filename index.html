@@ -67,7 +67,7 @@
             box-shadow: 0 0 5px #660000;
         }
     
-        .button {
+        .submit-button {
             justify-content: center;
             align-items: center;
             padding: 10px 0;
@@ -86,13 +86,13 @@
             font-family: 'Poppins';
         }
     
-        .button .icon {
+        .submit-button .icon {
             margin-right: 8px;
             height: 1.15rem;
             width: auto;
         }
     
-        .button:hover {
+        .submit-button:hover {
             background-color: #210707;
             transform: scale(1.01);
         }
@@ -190,7 +190,7 @@
             .form-control {
                 padding: 15px;
             }
-            .button {
+            .submit-button {
                 width: 100px;
                 height: 50px;
             }
@@ -204,7 +204,7 @@
             .form-control {
                 padding: 20px;
             }
-            .button {
+            .submit-button {
                 width: 110px;
                 height: 60px;
             }
@@ -215,7 +215,7 @@
             .container {
                 max-width: 600px;
             }
-            .button {
+            .submit-button {
                 width: 120px;
                 height: 70px;
             }
@@ -231,7 +231,7 @@
             <img src="https://i.imgur.com/Cp5F1wi.png" alt="Bem-vindo">
             <h2>Olá {USERNAME}, seja bem-vindo ao formulário de Controle de Contratações.</h2>
             <p>Neste formulário você precisa preencher todas as informações de forma correta, se atente-se aos mínimos detalhes.</p>
-            <button class="button" id="start-form">Avançar</button>
+            <submit-button class="submit-button" id="start-form">Avançar</submit-button>
         </div>
 
         <div class="container hidden" id="form-container">
@@ -250,7 +250,7 @@
                 </div>
                 <div class="checkbox">
                     <input type="checkbox" id="checkbox" />
-                    <label for="checkbox">Confirmo a postagem da contratação</label>
+                    <label for="checkbox">Confirmo a contratação</label>
                 </div>
                 <button type="submit" id="submit-button">Enviar</button>
             </form>
