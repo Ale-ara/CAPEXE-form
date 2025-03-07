@@ -348,6 +348,24 @@
                         }, 3000); 
                     });
                 });
+
+                document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("contract-form");
+    const checkbox = document.getElementById("checkbox"); // ID do checkbox
+    const submitButton = document.getElementById("submit-button"); // ID do botão de envio
+
+    form.addEventListener("submit", function (event) {
+        if (!checkbox.checked) {
+            event.preventDefault(); // Impede o envio do formulário
+            alert("Por favor, marque o checkbox antes de enviar o formulário.");
+        }
+    });
+});
+
+
             </script>
+            
+
+
 </body>
 </html>
