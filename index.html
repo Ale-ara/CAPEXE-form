@@ -278,7 +278,15 @@
                 });
             
                 document.getElementById("contract-form").addEventListener("submit", async function (event) {
-                    event.preventDefault(); 
+                    // Verifica se o checkbox foi marcado
+                    const checkbox = document.getElementById("checkbox");
+                    if (!checkbox.checked) {
+                        event.preventDefault(); // Impede o envio do formulário
+                        alert("Por favor, marque o checkbox antes de enviar o formulário.");
+                        return; // Não prossegue com o envio se o checkbox não estiver marcado
+                    }
+            
+                    event.preventDefault(); // Impede o envio padrão do formulário
                     document.getElementById("loading-message").classList.add("show");
             
                     // Coleta os dados do formulário
@@ -321,51 +329,31 @@
                         console.error("Erro:", error);
                     }
                 });
+            
+                // Este script mostra e esconde a tela de carregamento enquanto o formulário está sendo enviado
+                const loadingScreen = document.getElementById('loading-screen');
+                loadingScreen.classList.add('hidden');
+            
+                function showLoadingScreen() {
+                    loadingScreen.classList.remove('hidden');
+                }
+            
+                function hideLoadingScreen() {
+                    loadingScreen.classList.add('hidden');
+                }
+            
+                const form = document.querySelector('form');
+                form.addEventListener('submit', function(event) {
+                    showLoadingScreen();
+            
+                    // Depois de 3 segundos, esconde a tela de carregamento
+                    setTimeout(function() {
+                        hideLoadingScreen();
+                    }, 3000); 
+                });
             });
             </script>
             
-            <script>
-                // Este script mostra e esconde a tela de carregamento enquanto o formulário está sendo enviado
-                document.addEventListener('DOMContentLoaded', function() {
-                    const loadingScreen = document.getElementById('loading-screen');
-                    loadingScreen.classList.add('hidden');
-                    
-                    function showLoadingScreen() {
-                        loadingScreen.classList.remove('hidden');
-                    }
             
-                    function hideLoadingScreen() {
-                        loadingScreen.classList.add('hidden');
-                    }
-            
-                    const form = document.querySelector('form'); 
-                    form.addEventListener('submit', function(event) {
-                        showLoadingScreen();
-                        
-                        // Depois de 3 segundos, esconde a tela de carregamento
-                        setTimeout(function() {
-                            hideLoadingScreen();
-                        }, 3000); 
-                    });
-                });
-
-                document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("contract-form");
-    const checkbox = document.getElementById("checkbox"); // ID do checkbox
-    const submitButton = document.getElementById("submit-button"); // ID do botão de envio
-
-    form.addEventListener("submit", function (event) {
-        if (!checkbox.checked) {
-            event.preventDefault(); // Impede o envio do formulário
-            alert("Por favor, marque o checkbox antes de enviar o formulário.");
-        }
-    });
-});
-
-
-            </script>
-            
-
-
 </body>
 </html>
