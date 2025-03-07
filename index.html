@@ -126,7 +126,7 @@
         font-size: 15px;
         font-weight: 100;
         cursor: pointer;
-        margin-top: 20px; /* Adicionando margem superior para descer o checkbox */
+        margin-top: 20px;
     }
     
         .checkbox label::before {
@@ -179,9 +179,6 @@
             to { opacity: 0; transform: translate(-50%, -60%); }
         }
     
-        /* Media Queries for responsiveness */
-    
-        /* For mobile devices (width <= 480px) */
         @media (max-width: 480px) {
             .container {
                 max-width: 90%;
@@ -196,7 +193,6 @@
             }
         }
     
-        /* For tablets (width <= 768px) */
         @media (max-width: 768px) {
             .container {
                 max-width: 80%;
@@ -210,7 +206,6 @@
             }
         }
     
-        /* For larger screens (width > 768px) */
         @media (min-width: 769px) {
             .container {
                 max-width: 600px;
@@ -221,8 +216,6 @@
             }
         }
     </style>
-    
- 
 </head>
 <body>
     <div class="container">
@@ -278,18 +271,16 @@
                 });
             
                 document.getElementById("contract-form").addEventListener("submit", async function (event) {
-                    // Verifica se o checkbox foi marcado
                     const checkbox = document.getElementById("checkbox");
                     if (!checkbox.checked) {
-                        event.preventDefault(); // Impede o envio do formulário
-                        alert("Por favor, marque o checkbox antes de enviar o formulário.");
-                        return; // Não prossegue com o envio se o checkbox não estiver marcado
+                        event.preventDefault();
+                        alert("Por favor, confirme a contratação antes de enviar o formulário.");
+                        return;
                     }
             
-                    event.preventDefault(); // Impede o envio padrão do formulário
+                    event.preventDefault(); 
                     document.getElementById("loading-message").classList.add("show");
             
-                    // Coleta os dados do formulário
                     const nickNumeracao = document.getElementById('nickNumeracao').value;
                     const nickCivil = document.getElementById('nickCivil').value;
                     const comprovacao = document.getElementById('comprovacao').value;
@@ -303,7 +294,6 @@
                     };
             
                     try {
-                        // Envia os dados para o Google Apps Script
                         await fetch('https://script.google.com/macros/s/AKfycbzNqEb6oqFaFv8DNwKh08ujvMAsKpxZNJ-IO46hpkUPDPgAjT0o85_YetSSXg3XQLpV/exec', {
                             method: 'POST',
                             headers: {
@@ -313,24 +303,20 @@
                             body: JSON.stringify(data)
                         });
             
-                        // Esconde a tela de carregamento e mostra a mensagem de sucesso
                         document.getElementById("loading-message").classList.remove("show");
                         document.getElementById("success-message").classList.add("show");
             
-                        // Redireciona para a próxima página após 2 segundos
                         setTimeout(function() {
-                            window.location.href = "https://www.google.com.br"; // Altere para o link desejado
+                            window.location.href = "https://www.google.com.br";
                         }, 2000);
             
                     } catch (error) {
-                        // Caso ocorra um erro, esconde a tela de carregamento e exibe um alerta
                         document.getElementById("loading-message").classList.remove("show");
                         alert("Erro ao enviar. Verifique a conexão e tente novamente.");
                         console.error("Erro:", error);
                     }
                 });
             
-                // Este script mostra e esconde a tela de carregamento enquanto o formulário está sendo enviado
                 const loadingScreen = document.getElementById('loading-screen');
                 loadingScreen.classList.add('hidden');
             
@@ -346,14 +332,11 @@
                 form.addEventListener('submit', function(event) {
                     showLoadingScreen();
             
-                    // Depois de 3 segundos, esconde a tela de carregamento
                     setTimeout(function() {
                         hideLoadingScreen();
                     }, 3000); 
                 });
             });
-            </script>
-            
-            
+            </script>    
 </body>
 </html>
