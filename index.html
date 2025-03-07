@@ -195,58 +195,57 @@
     <h3>Formulário enviado com sucesso!</h3>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const username = new URLSearchParams(window.location.search).get("username");
-        if (username) {
-            document.getElementById("username-placeholder").textContent = username;
-        }
+document.addEventListener("DOMContentLoaded", function () {
+    const username = new URLSearchParams(window.location.search).get("username");
+    if (username) {
+        document.getElementById("username-placeholder").textContent = username;
+    }
 
-        document.getElementById("start-form").addEventListener("click", function() {
-            document.getElementById("welcome-container").classList.add("hidden");
-            document.getElementById("form-container").classList.remove("hidden");
-        });
-
-        document.getElementById("contract-form").addEventListener("submit", async function(event) {
-            event.preventDefault();
-
-            document.getElementById("loading-message").classList.add("show");
-
-            const formData = {
-                nickNumeracao: document.getElementById("nickNumeracao").value,
-                nickCivil: document.getElementById("nickCivil").value,
-                comprovacao: document.getElementById("comprovacao").value,
-                confirmarPostagem: document.getElementById("confirmarPostagem").checked,
-                username: username || "Desconhecido"
-            };
-
-            try {
-                let response = await fetch("https://script.google.com/macros/s/AKfycbz0xbe-tpWW-gHAR--dea9tQoKMCA2XE2rwQczz8ZtMEIGtJ9_Wu9xju90dA9GmtRmb/exec", {
-                    method: "POST",
-                    body: JSON.stringify(formData),
-                    headers: { "Content-Type": "application/json" }
-                });
-
-                let result = await response.json();
-
-                document.getElementById("loading-message").classList.remove("show");
-
-                if (result.status === "success") {
-                    document.getElementById("success-message").classList.add("show");
-                    setTimeout(() => {
-                        document.getElementById("success-message").classList.remove("show");
-                        document.getElementById("form-container").reset();
-                    }, 2000);
-                } else {
-                    alert("Erro ao enviar: " + result.message);
-                }
-            } catch (error) {
-                document.getElementById("loading-message").classList.remove("show");
-                alert("Erro ao enviar. Verifique a conexão e tente novamente.");
-                console.error("Erro:", error);
-            }
-        });
+    document.getElementById("start-form").addEventListener("click", function () {
+        document.getElementById("welcome-container").classList.add("hidden");
+        document.getElementById("form-container").classList.remove("hidden");
     });
-</script>
+
+    document.getElementById("contract-form").addEventListener("submit", async function (event) {
+        event.preventDefault(); 
+
+        document.getElementById("loading-message").classList.add("show");
+
+        const formData = {
+            nickNumeracao: document.getElementById("nickNumeracao").value,
+            nickCivil: document.getElementById("nickCivil").value,
+            comprovacao: document.getElementById("comprovacao").value,
+            confirmarPostagem: document.getElementById("confirmarPostagem").checked ? "Sim" : "Não",
+            username: username || "Desconhecido",
+            dataHora: new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+        };
+
+        try {
+            await fetch("https://script.google.com/macros/s/AKfycbz0xbe-tpWW-gHAR--dea9tQoKMCA2XE2rwQczz8ZtMEIGtJ9_Wu9xju90dA9GmtRmb/exec", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                mode: "no-cors",
+                body: JSON.stringify(formData)
+            });
+
+            document.getElementById("loading-message").classList.remove("show");
+            document.getElementById("success-message").classList.add("show");
+
+            setTimeout(() => {
+                document.getElementById("success-message").classList.remove("show");
+                document.getElementById("contract-form").reset();
+            }, 2000);
+            
+            window.location.href = "https://www.policiarcc.com/f128-ordem-militar"; // Redirecionamento
+
+        } catch (error) {
+            document.getElementById("loading-message").classList.remove("show");
+            alert("Erro ao enviar. Verifique a conexão e tente novamente.");
+            console.error("Erro:", error);
+        }
+    });
+});
 </body>
 </html>
