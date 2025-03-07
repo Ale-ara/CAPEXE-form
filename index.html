@@ -196,81 +196,13 @@
 </div>
 
 <script>
-    document.getElementById('start-form').addEventListener('click', function () {
-        document.getElementById('welcome-container').classList.add('hidden');
-        document.getElementById('form-container').classList.remove('hidden');
-    });
-
-    document.getElementById('contract-form').addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        const nickNumeracao = document.getElementById('nickNumeracao').value;
-        const nickCivil = document.getElementById('nickCivil').value;
-        const comprovacao = document.getElementById('comprovacao').value;
-        const timestamp = new Date().toLocaleString();
-
-        const loadingMessage = document.getElementById('loading-message');
-        loadingMessage.classList.add('show');
-        loadingMessage.style.animation = 'fadeIn 0.5s ease-in-out';
-
-        // Enviando os dados ao servidor
-        fetch('https://script.google.com/macros/s/AKfycby60MRvwPcMw5ZuNOFUA9y7ffzA5BQjTgCO8FI-M513QR2x07_Bz6tGv30YZibF6MG1/exec', {
-            method: 'POST',
-            mode: 'cors', // Usando 'cors' para acesso à resposta
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                timestamp: timestamp,
-                nickNumeracao: nickNumeracao,
-                nickCivil: nickCivil,
-                comprovacao: comprovacao
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            loadingMessage.style.animation = 'fadeOut 0.5s ease-in-out';
-            setTimeout(() => loadingMessage.classList.remove('show'), 500);
-
-            const successMessage = document.getElementById('success-message');
-            if (data.status === 'success') {
-                successMessage.innerHTML = `<h3>${data.message}</h3>`;
-            } else {
-                successMessage.innerHTML = `<h3>Erro: ${data.message}</h3>`;
-            }
-            successMessage.classList.add('show');
-            successMessage.style.animation = 'fadeIn 0.5s ease-in-out';
-
-            setTimeout(() => {
-                successMessage.style.animation = 'fadeOut 0.5s ease-in-out';
-                setTimeout(() => successMessage.classList.remove('show'), 500);
-            }, 3000);
-
-            document.getElementById('contract-form').reset();
-        })
-        .catch(error => {
-            loadingMessage.style.animation = 'fadeOut 0.5s ease-in-out';
-            setTimeout(() => loadingMessage.classList.remove('show'), 500);
-
-            const successMessage = document.getElementById('success-message');
-            successMessage.innerHTML = '<h3>Erro ao enviar o formulário. Tente novamente mais tarde.</h3>';
-            successMessage.classList.add('show');
-            successMessage.style.animation = 'fadeIn 0.5s ease-in-out';
-
-            setTimeout(() => {
-                successMessage.style.animation = 'fadeOut 0.5s ease-in-out';
-                setTimeout(() => successMessage.classList.remove('show'), 500);
-            }, 3000);
-
-            console.error('Erro na solicitação:', error);
-        });
-    });
-
+    // Função para obter parâmetros da URL
     function getParameterByName(name) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(name);
     }
 
+    // Aguarda o carregamento da página e personaliza a mensagem de boas-vindas
     window.addEventListener('DOMContentLoaded', () => {
         const username = getParameterByName('username');
         if (username) {
@@ -279,6 +211,55 @@
                 welcomeMessage.innerHTML = `Olá ${username}, seja bem-vindo ao formulário de Controle de Contratações do turno Vespertino.`;
             }
         }
+    });
+
+    // Exibir o formulário ao clicar no botão "Avançar"
+    document.getElementById("start-form").addEventListener("click", function() {
+        document.getElementById("welcome-container").classList.add("hidden");
+        document.getElementById("form-container").classList.remove("hidden");
+    });
+
+    // Enviar o formulário para o Google Sheets
+    document.getElementById("contract-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Evita o recarregamento da página
+
+        // Exibir mensagem de carregamento
+        document.getElementById("loading-message").classList.add("show");
+
+        // Captura os dados do formulário
+        let formData = {
+            nickNumeracao: document.getElementById("nickNumeracao").value,
+            nickCivil: document.getElementById("nickCivil").value,
+            comprovacao: document.getElementById("comprovacao").value,
+            confirmarPostagem: document.getElementById("confirmarPostagem").checked ? "Sim" : "Não",
+            username: getParameterByName('username') || "Desconhecido" // Captura o nome do usuário da URL
+        };
+
+        // Enviar para o Google Apps Script
+        fetch("https://script.google.com/macros/s/AKfycbyM4Ik8E8bO9IG5lUX124ZT9XjEI84QSsC6DET3sOstPFSnDGaNoekiSAYtUz5dSH2T/exec", {
+            method: "POST",
+            body: JSON.stringify(formData),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                document.getElementById("loading-message").classList.remove("show");
+                document.getElementById("success-message").classList.add("show");
+                setTimeout(() => {
+                    document.getElementById("success-message").classList.remove("show");
+                    document.getElementById("contract-form").reset(); // Limpa o formulário
+                }, 2000);
+            } else {
+                alert("Erro ao enviar o formulário. Tente novamente.");
+            }
+        })
+        .catch(error => {
+            alert("Erro de conexão!");
+            console.error("Erro:", error);
+        });
     });
 </script>
 </body>
