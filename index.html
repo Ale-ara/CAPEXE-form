@@ -1011,70 +1011,66 @@ button:active {
 </div>
 
 <script>
-/* ===== Seletores ===== */
-/* ===== Enviar para Google Sheets (bloco substituto) ===== */
-document.getElementById("enviarBtn").onclick = async function () {
-  // Desabilita botão para evitar cliques repetidos
+document.addEventListener("DOMContentLoaded", function () {
   const btn = document.getElementById("enviarBtn");
-  btn.disabled = true;
 
-  try {
-    // Pega valores diretamente (sempre declare aqui)
-    const nicknameRaw = document.getElementById("nickname").value.trim();
-    const numero = document.getElementById("numero").value.trim();
-    const trainee = document.getElementById("trainee").value.trim();
-    const comprovacao = document.getElementById("comprovacao").value.trim();
+  btn.onclick = async function () {
+    btn.disabled = true;
 
-    // Validação
-    if (!nicknameRaw || !numero || !trainee || !comprovacao) {
-      alert("Preencha todos os campos antes de enviar.");
+    try {
+      // Captura dos valores
+      const nicknameRaw = document.getElementById("nickname").value.trim();
+      const numero = document.getElementById("numero").value.trim();
+      const trainee = document.getElementById("trainee").value.trim();
+      const comprovacao = document.getElementById("comprovacao").value.trim();
+
+      // Validação
+      if (!nicknameRaw || !numero || !trainee || !comprovacao) {
+        alert("Preencha todos os campos antes de enviar.");
+        btn.disabled = false;
+        return;
+      }
+
+      // Formata nickname
+      const nicknameFormatado = `${nicknameRaw} [${numero}]`;
+      const dataHora = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+
+      console.log("Enviando dados:", { nicknameFormatado, trainee, comprovacao, dataHora });
+
+      // Monta o FormData
+      const formData = new FormData();
+      formData.append("nickname", nicknameFormatado);
+      formData.append("trainee", trainee);
+      formData.append("comprovacao", comprovacao);
+      formData.append("dataHora", dataHora);
+
+      // URL do Apps Script
+      const url = "https://script.google.com/macros/s/AKfycbxIRLNQ16ZoVu0qk47aLgDRHS4MwIdvZwcNGDZ-tgSmLGi1oh1T0l7jj7A-Y4BJ0PAR/exec";
+
+      await fetch(url, {
+        method: "POST",
+        body: formData
+      });
+
+      // Mostra popup
+      abrirPopup();
+
+      // Limpa campos
+      document.getElementById("nickname").value = "";
+      document.getElementById("numero").value = "";
+      document.getElementById("trainee").value = "";
+      document.getElementById("comprovacao").value = "";
+
+    } catch (erro) {
+      console.error("Erro no envio:", erro);
+      alert("Falha no envio. Verifique a conexão e tente novamente.");
+    } finally {
       btn.disabled = false;
-      return;
     }
+  };
+});
 
-    // Formata nickname (declaração correta — evita ReferenceError)
-    const nicknameFormatado = `${nicknameRaw} [${numero}]`;
-    const dataHora = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-
-    // DEBUG: confirme no console o que será enviado
-    console.log("Enviando dados:", { nicknameFormatado, trainee, comprovacao, dataHora });
-
-    // Usando FormData (recomendado para compatibilidade com Apps Script)
-    const formData = new FormData();
-    formData.append("nickname", nicknameFormatado);
-    formData.append("trainee", trainee);
-    formData.append("comprovacao", comprovacao);
-    formData.append("dataHora", dataHora);
-
-    // URL do seu Apps Script (confirme que é a correta)
-    const url = "https://script.google.com/macros/s/AKfycbxIRLNQ16ZoVu0qk47aLgDRHS4MwIdvZwcNGDZ-tgSmLGi1oh1T0l7jj7A-Y4BJ0PAR/exec";
-
-    // ===== Envio =====
-    await fetch(url, {
-      method: "POST",
-      // mode: "no-cors", // <--- descomente somente se necessário em produção (impede leitura da resposta)
-      body: formData
-    });
-
-    // Se chegou até aqui o envio foi feito do lado do navegador
-    abrirPopup();
-
-    // limpa campos
-    document.getElementById("nickname").value = "";
-    document.getElementById("numero").value = "";
-    document.getElementById("trainee").value = "";
-    document.getElementById("comprovacao").value = "";
-
-  } catch (erro) {
-    console.error("Erro no envio:", erro);
-    alert("Falha no envio. Verifique a conexão e tente novamente.");
-  } finally {
-    btn.disabled = false;
-  }
-};
-</script>
-<script>
-/* ===== Popup ===== */
+// ===== Popup =====
 function abrirPopup() {
   document.getElementById("popup").classList.add("active");
   document.getElementById("popupOverlay").classList.add("active");
@@ -1085,6 +1081,7 @@ function fecharPopup() {
   document.getElementById("popupOverlay").classList.remove("active");
 }
 </script>
+
 
 </body>
 </html>
