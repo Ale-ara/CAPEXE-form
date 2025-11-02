@@ -1011,7 +1011,7 @@ button:active {
 </div>
 
 <script>
-/* ===== Seletores ===== */
+/* ===== Seletores e navegação ===== */
 const container = document.querySelector('.container');
 const btnContratacao = document.getElementById('btnContratacao');
 const btnPlanilha = document.getElementById('btnPlanilha');
@@ -1029,7 +1029,7 @@ btnPlanilha.onclick = () => {
   window.open("https://docs.google.com/spreadsheets/d/1yt9q_--UINWaeRhW-oGMN5x2PckrM-E_hW2mn4NeFCk/edit?usp=sharing", "_blank");
 };
 
-/* ===== Abrir tela de postagem (se existir esse botão) ===== */
+/* ===== Abrir tela de postagem ===== */
 if (abrirPostagem) {
   abrirPostagem.onclick = () => {
     container.style.transform = "translateX(-50%)";
@@ -1043,7 +1043,9 @@ voltarBtn.onclick = () => {
   voltarBtn.style.display = "none";
 };
 </script>
+
 <script>
+/* ===== Envio do formulário ===== */
 document.addEventListener("DOMContentLoaded", function () {
   const btn = document.getElementById("enviarBtn");
 
@@ -1100,21 +1102,6 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 });
 
-
-// ===== Popup =====
-function abrirPopup() {
-  document.getElementById("popup").classList.add("active");
-  document.getElementById("popupOverlay").classList.add("active");
-}
-
-function fecharPopup() {
-  document.getElementById("popup").classList.remove("active");
-  document.getElementById("popupOverlay").classList.remove("active");
-}
-</script>
-
-
-<script>
 /* ===== Popup ===== */
 function abrirPopup() {
   document.getElementById("popup").classList.add("active");
@@ -1126,6 +1113,7 @@ function fecharPopup() {
   document.getElementById("popupOverlay").classList.remove("active");
 }
 </script>
+
 
 </body>
 </html>
