@@ -1045,7 +1045,6 @@ voltarBtn.onclick = () => {
 </script>
 
 <script>
-/* ===== Envio do formulário ===== */
 document.addEventListener("DOMContentLoaded", function () {
   const btn = document.getElementById("enviarBtn");
 
@@ -1067,13 +1066,14 @@ document.addEventListener("DOMContentLoaded", function () {
       const nicknameFormatado = `${nicknameRaw} [${numero}]`;
       const dataHora = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 
+      // Cria FormData com os nomes compatíveis com o Apps Script
       const formData = new FormData();
       formData.append("nickname", nicknameFormatado);
       formData.append("trainee", trainee);
       formData.append("comprovacao", comprovacao);
       formData.append("dataHora", dataHora);
 
-      const url = "https://script.google.com/macros/s/AKfycbxL-x1_pxcCIak90jhgdkOeU0rD4YcSuLrHv2gTLGdaSaM0CdcHHFJMxTAblF3j8mlw/exec";
+      const url = "https://script.google.com/macros/s/SEU_SCRIPT_ID/exec"; // Substitua pelo seu
 
       const resposta = await fetch(url, {
         method: "POST",
@@ -1102,7 +1102,7 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 });
 
-/* ===== Popup ===== */
+// ===== Popup =====
 function abrirPopup() {
   document.getElementById("popup").classList.add("active");
   document.getElementById("popupOverlay").classList.add("active");
@@ -1113,6 +1113,7 @@ function fecharPopup() {
   document.getElementById("popupOverlay").classList.remove("active");
 }
 </script>
+
 
 
 </body>
