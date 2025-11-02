@@ -1080,10 +1080,12 @@ document.addEventListener("DOMContentLoaded", function () {
       // URL do Apps Script
       const url = "https://script.google.com/macros/s/AKfycbxaeWpDRov67Y2ou20YUO4mUJ_eGkgO774mWopfqKLSEpCLvoiaXiyrePwld5pfWrBs/exec";
 
-      await fetch(url, {
-        method: "POST",
-        body: formData
-      });
+    fetch(url, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ nickname: nicknameFormatado, trainee, comprovacao, dataHora })
+});
+
 
       // Mostra popup
       abrirPopup();
