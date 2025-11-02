@@ -1061,13 +1061,15 @@ document.getElementById("enviarBtn").onclick = async () => {
   }
 
   await fetch("https://script.google.com/macros/s/AKfycbztpKVQmPK_6Zp5UQrFjpqjZOlwerwzBOd_qjZ4KZ4a-1GVplc-NcyxL121IQPVDJTn/exec", {
-    method: "POST",
-    mode: "no-cors",
-    body: JSON.stringify(dados)
-  });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(dados)
+});
 
-  abrirPopup();
-};
+abrirPopup();
+
 
 /* ===== Popup ===== */
 function abrirPopup() {
