@@ -1056,25 +1056,19 @@ document.getElementById("enviarBtn").onclick = async () => {
     return;
   }
 
-  const nicknameFormatado = `${nickname} [${numero}]`;
-
-  const dados = {
-    nickname: nicknameFormatado,
-    trainee: trainee,
-    comprovacao: comprovacao,
-    dataHora: new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
-  };
-
-  // ===== Envio com CORS liberado =====
-  document.getElementById("enviarBtn").disabled = true;
+  const formData = new FormData();
+  formData.append("nickname", nicknameFormatado);
+  formData.append("trainee", trainee);
+  formData.append("comprovacao", comprovacao);
+  formData.append("dataHora", new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" }));
 
   try {
-    await fetch("https://script.google.com/macros/s/AKfycbxIRLNQ16ZoVu0qk47aLgDRHS4MwIdvZwcNGDZ-tgSmLGi1oh1T0l7jj7A-Y4BJ0PAR/exec", {
+    await fetch("https://script.google.com/macros/s/AKfycbzFDmSKzuOFdLV37SotiZIYYMHS99YwYzoa8NutI64ZQRUkW43vAyTe6tFIPHZJxPxl/exec", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      mode: "no-cors",
-      body: JSON.stringify(dados),
+      body: formData,
+      mode: "no-cors"
     });
+
 
     abrirPopup(); // Mostra o popup de sucesso
     document.getElementById("nickname").value = "";
