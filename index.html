@@ -1047,20 +1047,30 @@ voltarBtn.onclick = () => {
 };
 
 /* ===== Enviar para Google Sheets ===== */
+
 document.getElementById("enviarBtn").onclick = async () => {
   const nickname = document.getElementById("nickname").value.trim();
   const numero = document.getElementById("numero").value.trim();
+  const trainee = document.getElementById("trainee").value.trim();
   const comprovacao = document.getElementById("comprovacao").value.trim();
 
-  if (!nickname || !numero || !comprovacao) {
+  if (!nickname || !numero || !trainee || !comprovacao) {
     alert("Preencha todos os campos antes de enviar.");
     return;
   }
 
-  const dados = { nickname, numero, comprovacao };
+  // Formata o nickname com número (Ex: Qox [32])
+  const nicknameFormatado = `${nickname} [${numero}]`;
+
+  const dados = {
+    nickname: nicknameFormatado,
+    trainee: trainee,
+    comprovacao: comprovacao,
+    dataHora: new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+  };
 
   try {
-    const resposta = await fetch("https://script.google.com/macros/s/AKfycbxSB8uDs51fKXtf_UPyN-n8zKtrxdW_4BKN_xdJ7Fp4Xq4GpoPRsgWfOsFzLqBtbHSP/exec", {
+    const resposta = await fetch("https://script.google.com/macros/s/AKfycbymdsT6mSvT2iIGIe5MCJFEKZT8ZHvb63hXGEA5f93Uh8J6HdCv9GRiezHja1F_rjYI/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dados),
@@ -1068,12 +1078,23 @@ document.getElementById("enviarBtn").onclick = async () => {
 
     const resultado = await resposta.json();
     console.log("Resultado:", resultado);
-    alert(resultado.mensagem || "Enviado com sucesso!");
+
+    if (resultado.status === "sucesso") {
+      abrirPopup(); // Abre o popup estilizado
+      document.getElementById("nickname").value = "";
+      document.getElementById("numero").value = "";
+      document.getElementById("trainee").value = "";
+      document.getElementById("comprovacao").value = "";
+    } else {
+      alert("Ocorreu um erro ao enviar. Tente novamente.");
+    }
   } catch (erro) {
     console.error("Erro no envio:", erro);
-    alert("Falha no envio. Verifique o console.");
+    alert("Falha no envio. Verifique sua conexão e tente novamente.");
   }
 };
+
+
 
 
 /* ===== Popup ===== */
