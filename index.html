@@ -267,9 +267,6 @@ input::placeholder {
   font-size: 0.85rem;
 }
 
-
-
-
 /* BOTÃO */
 button {
   width: 100%;
@@ -1059,7 +1056,6 @@ document.getElementById("enviarBtn").onclick = async () => {
     return;
   }
 
-  // Formata o nickname com número (Ex: Qox [32])
   const nicknameFormatado = `${nickname} [${numero}]`;
 
   const dados = {
@@ -1069,32 +1065,30 @@ document.getElementById("enviarBtn").onclick = async () => {
     dataHora: new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
   };
 
+  // ===== Envio com CORS liberado =====
+  document.getElementById("enviarBtn").disabled = true;
+
   try {
-    const resposta = await fetch("https://script.google.com/macros/s/AKfycbw3_lofnRMGF6IwqMCexjw0a5ykiG7LAFuCiz0wQjv97OBLYEEZsvQLBvEB4sz_IvR3/exec", {
+    await fetch("https://script.google.com/macros/s/AKfycbzmeoSU2rj-uNuQ0v-qFjKk-PtQ_HcSkh-YlnhOU8XlFldm0JXMlKCBXCBTnM8elr6R/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      mode: "no-cors",
       body: JSON.stringify(dados),
     });
 
-    const resultado = await resposta.json();
-    console.log("Resultado:", resultado);
+    abrirPopup(); // Mostra o popup de sucesso
+    document.getElementById("nickname").value = "";
+    document.getElementById("numero").value = "";
+    document.getElementById("trainee").value = "";
+    document.getElementById("comprovacao").value = "";
 
-    if (resultado.status === "sucesso") {
-      abrirPopup(); // Abre o popup estilizado
-      document.getElementById("nickname").value = "";
-      document.getElementById("numero").value = "";
-      document.getElementById("trainee").value = "";
-      document.getElementById("comprovacao").value = "";
-    } else {
-      alert("Ocorreu um erro ao enviar. Tente novamente.");
-    }
   } catch (erro) {
     console.error("Erro no envio:", erro);
     alert("Falha no envio. Verifique sua conexão e tente novamente.");
+  } finally {
+    document.getElementById("enviarBtn").disabled = false;
   }
 };
-
-
 
 
 /* ===== Popup ===== */
