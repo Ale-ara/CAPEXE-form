@@ -1048,7 +1048,7 @@ voltarBtn.onclick = () => {
 
 /* ===== Enviar para Google Sheets ===== */
 document.getElementById("enviarBtn").onclick = async () => {
-  const nickname = document.getElementById("usuario").value.trim();
+  const nickname = document.getElementById("nickname").value.trim();
   const numero = document.getElementById("numero").value.trim();
   const comprovacao = document.getElementById("comprovacao").value.trim();
 
@@ -1060,7 +1060,7 @@ document.getElementById("enviarBtn").onclick = async () => {
   const dados = { nickname, numero, comprovacao };
 
   try {
-    const resposta = await fetch("https://script.google.com/macros/s/AKfycbx7VoqF0ZEcOxBozHjHmOScetF2LZJ4FRzcBeK-joAjqnVoD0Q9VoOPtHPRZN_bQdxZ/exec", {
+    const resposta = await fetch("https://script.google.com/macros/s/AKfycbxSB8uDs51fKXtf_UPyN-n8zKtrxdW_4BKN_xdJ7Fp4Xq4GpoPRsgWfOsFzLqBtbHSP/exec", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(dados),
