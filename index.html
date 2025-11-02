@@ -1060,16 +1060,21 @@ document.getElementById("enviarBtn").onclick = async () => {
     return;
   }
 
-  await fetch("https://script.google.com/macros/s/AKfycbztpKVQmPK_6Zp5UQrFjpqjZOlwerwzBOd_qjZ4KZ4a-1GVplc-NcyxL121IQPVDJTn/exec", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(dados)
-});
+  try {
+    const resposta = await fetch("https://script.google.com/macros/s/AKfycbztpKVQmPK_6Zp5UQrFjpqjZOlwerwzBOd_qjZ4KZ4a-1GVplc-NcyxL121IQPVDJTn/exec", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(dados)
+    });
 
-abrirPopup();
-}
+    console.log("Status:", resposta.status);
+
+    abrirPopup();
+  } catch (erro) {
+    console.error("Erro no envio:", erro);
+    alert("Erro ao enviar os dados. Veja o console.");
+  }
+};
 
 /* ===== Popup ===== */
 function abrirPopup() {
