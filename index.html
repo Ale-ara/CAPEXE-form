@@ -1075,10 +1075,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const url = "https://script.google.com/macros/s/AKfycbx0C0WIAT_6U2kxzMU7FXDCaFyTMohuCGWGKDSU1i7yjIZoznMKOK01BywLZCzhTKE/exec"; // Substitua pelo seu
 
-      const resposta = await fetch(url, {
-        method: "POST",
-        body: formData
-      });
+      // JS
+fetch(url, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    nickname: nicknameFormatado,
+    trainee: trainee,
+    comprovacao: comprovacao,
+    dataHora: dataHora
+  })
+});
+
 
       const resultado = await resposta.json();
       console.log("Resposta do Apps Script:", resultado);
