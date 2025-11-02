@@ -1051,48 +1051,45 @@ document.addEventListener("DOMContentLoaded", function () {
     btn.disabled = true;
 
     try {
-      // Captura dos valores
       const nicknameRaw = document.getElementById("nickname").value.trim();
       const numero = document.getElementById("numero").value.trim();
       const trainee = document.getElementById("trainee").value.trim();
       const comprovacao = document.getElementById("comprovacao").value.trim();
 
-      // Validação
       if (!nicknameRaw || !numero || !trainee || !comprovacao) {
         alert("Preencha todos os campos antes de enviar.");
         btn.disabled = false;
         return;
       }
 
-      // Formata nickname
       const nicknameFormatado = `${nicknameRaw} [${numero}]`;
       const dataHora = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
 
-      console.log("Enviando dados:", { nicknameFormatado, trainee, comprovacao, dataHora });
-
-      // Monta o FormData
       const formData = new FormData();
       formData.append("nickname", nicknameFormatado);
       formData.append("trainee", trainee);
       formData.append("comprovacao", comprovacao);
       formData.append("dataHora", dataHora);
 
-      // URL do Apps Script
       const url = "https://script.google.com/macros/s/AKfycbxM5RldfB6_bLyVtQbxbQQZ_mQmKa_syKPRP-skDFd_2b_rAjuqf8PBkVRpGIxSKZF2/exec";
 
-     fetch(url, {
-  method: "POST",
-  body: formData // envia FormData direto, sem JSON
-});
+      const resposta = await fetch(url, {
+        method: "POST",
+        body: formData
+      });
 
-      // Mostra popup
-      abrirPopup();
+      const resultado = await resposta.json();
+      console.log("Resposta do Apps Script:", resultado);
 
-      // Limpa campos
-      document.getElementById("nickname").value = "";
-      document.getElementById("numero").value = "";
-      document.getElementById("trainee").value = "";
-      document.getElementById("comprovacao").value = "";
+      if (resultado.status === "sucesso") {
+        abrirPopup();
+        document.getElementById("nickname").value = "";
+        document.getElementById("numero").value = "";
+        document.getElementById("trainee").value = "";
+        document.getElementById("comprovacao").value = "";
+      } else {
+        alert("Erro ao enviar: " + resultado.mensagem);
+      }
 
     } catch (erro) {
       console.error("Erro no envio:", erro);
@@ -1102,6 +1099,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 });
+
 
 // ===== Popup =====
 function abrirPopup() {
