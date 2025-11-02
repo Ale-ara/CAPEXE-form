@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>[INS] Contratações</title>
-<link rel="icon" href="https://www.habbo.com.br/habbo-imaging/badge/b09064s43131s50134s17113s171153f3edc7f555be912c2392e285b05bd34.gif" />
+<title>[CAPExe] Contratações</title>
+<link rel="icon" href="https://i.imgur.com/uAp8X9f.png" />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -214,6 +214,7 @@ body {
   display: flex;
   gap: 10px; /* diminui o espaço entre os inputs */
   margin-bottom: 14px; /* diminui o espaço abaixo da linha */
+  align-items: flex-end; /* alinha os campos pela base */
 }
 
 .campo {
@@ -229,31 +230,37 @@ body {
   font-weight: 500;
 }
 
+/* Campo pequeno (Nº) */
 .campo.pequeno {
-  flex: 0 0 70px; /* deixa menor o input da coluna "Nº" */
+  flex: 0 0 80px; /* largura fixa */
 }
 
+.campo.pequeno label {
+  font-size: 0.95rem;
+  margin-bottom: 6px;
+}
 
 /* Inputs padrão */
 .campo input,
 input {
   width: 100%;
-  padding: 8px 10px;       /* altura do input */
+  height: 38px; /* altura padronizada */
+  padding: 8px 10px;
   border-radius: 8px;
   border: 1px solid #662525;
-  margin-bottom: 6px;
   background: #1a0a0a;
   color: #fff;
   font-size: 0.9rem;
   outline: none;
   transition: 0.3s;
   box-shadow: inset 0 0 3px rgba(255, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .campo input:focus,
 input:focus {
   border-color: #b33;
-  box-shadow: 0 0 4px rgba(255,50,50,0.3);
+  box-shadow: 0 0 4px rgba(255, 50, 50, 0.3);
 }
 
 .campo input::placeholder,
@@ -262,19 +269,6 @@ input::placeholder {
   font-size: 0.85rem;
 }
 
-/* Inputs “pequenos” ficam iguais aos outros */
-.campo.pequeno input {
-  width: 100%;
-  padding: 8px 10px;   /* mesmo que os outros */
-  font-size: 0.9rem;   /* igual aos outros */
-  border-radius: 8px;
-}
-
-/* Labels dos pequenos iguais aos outros */
-.campo.pequeno label {
-  font-size: 0.95rem;
-  margin-bottom: 6px;
-}
 
 
 
@@ -998,7 +992,7 @@ document.addEventListener("mousemove", (e) => {
 
       <div class="campo pequeno">
         <label for="numero">Nº</label>
-        <input type="text" id="numero" placeholder="Ex: 31">
+        <input type="number" id="numero" placeholder="Ex: 31">
       </div>
     </div>
 
@@ -1066,14 +1060,15 @@ voltarBtn.onclick = () => {
 };
 
 /* ===== Enviar para Google Sheets ===== */
-document.getElementById("enviarDados").onclick = async () => {
+document.getElementById("enviarBtn").onclick = async () => {
   const dados = {
-    nickname: document.getElementById("nickname").value,
-    trainee: document.getElementById("trainee").value,
-    comprovacao: document.getElementById("comprovacao").value
+    nickname: document.getElementById("nickname").value.trim(),
+    numero: document.getElementById("numero").value.trim(),
+    trainee: document.getElementById("trainee").value.trim(),
+    comprovacao: document.getElementById("comprovacao").value.trim()
   };
 
-  if (!dados.nickname || !dados.trainee || !dados.comprovacao) {
+  if (!dados.nickname || !dados.numero || !dados.trainee || !dados.comprovacao) {
     alert("Preencha todos os campos.");
     return;
   }
@@ -1098,7 +1093,6 @@ function fecharPopup() {
   document.getElementById("popupOverlay").classList.remove("active");
 }
 </script>
-
 
 </body>
 </html>
