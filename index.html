@@ -1060,7 +1060,7 @@ document.getElementById("enviarBtn").onclick = async () => {
     return;
   }
 
-  await fetch("SUA_WEBAPP_URL_DO_APPS_SCRIPT_AQUI", {
+  await fetch("https://script.google.com/macros/s/AKfycbztpKVQmPK_6Zp5UQrFjpqjZOlwerwzBOd_qjZ4KZ4a-1GVplc-NcyxL121IQPVDJTn/exec", {
     method: "POST",
     mode: "no-cors",
     body: JSON.stringify(dados)
