@@ -1045,61 +1045,52 @@ voltarBtn.onclick = () => {
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const btn = document.getElementById("enviarBtn");
+function doPost(e) {
+  try {
+    const dados = JSON.parse(e.postData.contents);
 
-  btn.onclick = async function () {
-    btn.disabled = true;
+    const nickname = dados.nickname;
+    const trainee = dados.trainee;
+    const comprovacao = dados.comprovacao;
+    const dataHora = dados.dataHora;
 
-    try {
-      const nicknameRaw = document.getElementById("nickname").value.trim();
-      const numero = document.getElementById("numero").value.trim();
-      const trainee = document.getElementById("trainee").value.trim();
-      const comprovacao = document.getElementById("comprovacao").value.trim();
-
-      if (!nicknameRaw || !numero || !trainee || !comprovacao) {
-        alert("Preencha todos os campos antes de enviar.");
-        btn.disabled = false;
-        return;
-      }
-
-      const nicknameFormatado = `${nicknameRaw} [${numero}]`;
-      const dataHora = new Date().toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-
-      const url = "https://script.google.com/macros/s/AKfycbwDBOSoFXavlqtQLNtCjXaIl0O__O50rTARd3lLIBBWS788JJmid6nVqgiYrTelFddh/exec"; // Substitua pelo seu Apps Script
-
-      const resposta = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nickname: nicknameFormatado,
-          trainee: trainee,
-          comprovacao: comprovacao,
-          dataHora: dataHora
-        })
-      });
-
-      const resultado = await resposta.json();
-      console.log("Resposta do Apps Script:", resultado);
-
-      if (resultado.status === "sucesso") {
-        abrirPopup();
-        document.getElementById("nickname").value = "";
-        document.getElementById("numero").value = "";
-        document.getElementById("trainee").value = "";
-        document.getElementById("comprovacao").value = "";
-      } else {
-        alert("Erro ao enviar: " + resultado.mensagem);
-      }
-
-    } catch (erro) {
-      console.error("Erro no envio:", erro);
-      alert("Falha no envio. Verifique a conexão e tente novamente.");
-    } finally {
-      btn.disabled = false;
+    if (!nickname || !trainee || !comprovacao || !dataHora) {
+      return ContentService.createTextOutput(JSON.stringify({
+        status: "error",
+        mensagem: "Faltam campos obrigatórios."
+      })).setMimeType(ContentService.MimeType.JSON)
+        .setHeader("Access-Control-Allow-Origin", "*"); // CORS
     }
-  };
-});
+
+    const sheetId = "https://script.google.com/macros/s/AKfycbwDBOSoFXavlqtQLNtCjXaIl0O__O50rTARd3lLIBBWS788JJmid6nVqgiYrTelFddh/exec";
+    const ss = SpreadsheetApp.openById(sheetId);
+    const sheet = ss.getSheetByName("Respostas");
+    sheet.appendRow([nickname, trainee, comprovacao, dataHora]);
+
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "sucesso",
+      mensagem: "Dados enviados com sucesso!"
+    })).setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*"); // CORS
+
+  } catch (erro) {
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "error",
+      mensagem: erro.message
+    })).setMimeType(ContentService.MimeType.JSON)
+      .setHeader("Access-Control-Allow-Origin", "*"); // CORS
+  }
+}
+
+// === Para lidar com preflight requests ===
+function doOptions(e){
+  return ContentService.createTextOutput("")
+    .setMimeType(ContentService.MimeType.JSON)
+    .setHeader("Access-Control-Allow-Origin", "*")
+    .setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
+    .setHeader("Access-Control-Allow-Headers", "Content-Type");
+}
+
 
 // ===== Popup =====
 function abrirPopup() {
